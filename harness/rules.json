@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "confirmed": "2026-10-11",
+  "screens": ["home-dashboard", "add-material", "category-detail", "search-result"],
+  "retry_max": 3,
+  "gates": {
+    "G1": {
+      "stage": "S1",
+      "on_fail": "S1",
+      "checks": [
+        { "id": "G1-1", "file": "s1-research.md", "type": "distinct_count", "section": "레퍼런스", "column": "앱", "op": ">=", "value": 3 },
+        { "id": "G1-2", "file": "s1-research.md", "type": "row_count", "section": "레퍼런스", "op": "<=", "value": 6 },
+        { "id": "G1-3", "file": "s1-research.md", "type": "row_count", "section": "반영 목록", "op": ">=", "value": 1 },
+        { "id": "G1-4", "file": "s1-research.md", "type": "count_not_in", "section": "반영 목록", "column": "스토리#", "allowed": ["1", "2", "3", "4", "5"], "op": "==", "value": 0 }
+      ]
+    },
+    "G2": {
+      "stage": "S2",
+      "on_fail": "S2",
+      "checks": [
+        { "id": "G2-1", "file": "s2-spec.md", "type": "field_in", "section": "화면 정보", "field": "screen", "allowed_from": "screens" },
+        { "id": "G2-2", "file": "s2-spec.md", "type": "row_count", "section": "주요 요소", "op": ">=", "value": 1 },
+        { "id": "G2-3", "file": "s2-spec.md", "type": "row_count", "section": "다음 화면 경로", "op": ">=", "value": 1 },
+        { "id": "G2-4", "file": "s2-spec.md", "type": "row_count", "section": "클릭 경로", "op": ">=", "value": 1 },
+        { "id": "G2-5", "file": "s2-spec.md", "type": "count_where", "section": "클릭 경로", "column": "클릭 수", "where": "> 3", "op": "==", "value": 0, "story_rule": 1 },
+        { "id": "G2-6", "file": "s2-spec.md", "type": "order", "only_screen": "add-material", "section": "자동 불러오기 흐름", "column": "단계", "first": "분류 제안", "then": "사용자 승인", "story_rule": 2 },
+        { "id": "G2-7", "file": "s1-research.md", "type": "count_in", "section": "반영 목록", "column": "스토리#", "values_from_field": { "file": "s2-spec.md", "section": "화면 정보", "field": "담당 스토리" }, "op": ">=", "value": 1, "on_fail": "S1" }
+      ]
+    },
+    "G3": {
+      "stage": "S4",
+      "on_fail": "S3",
+      "checks": [
+        { "id": "G3-1", "file": "s3-keyscreens.md", "type": "row_count", "section": "키스크린", "op": "between", "value": [2, 3] },
+        { "id": "G3-2", "file": "s3-keyscreens.md", "type": "count_not_in", "section": "키스크린", "column": "프레임 크기", "allowed": ["1440x1024", "1440×1024"], "op": "==", "value": 0 },
+        { "id": "G3-3", "file": "s3-keyscreens.md", "type": "section_chars", "section": "리서치 정리", "op": ">=", "value": 1 },
+        { "id": "G3-4", "file": "s4-decision.md", "type": "count_empty", "section": "결정", "column": "승인자", "op": "==", "value": 0 },
+        { "id": "G3-5", "file": "s4-decision.md", "type": "row_count", "section": "결정", "op": "==", "value": 1 },
+        { "id": "G3-6", "file": "s4-decision.md", "type": "count_where", "section": "수정 요청", "column": "상태", "where": "== 다시 논의", "op": "==", "value": 0 }
+      ]
+    }
+  },
+  "human_approval": {
+    "stage": "S4",
+    "after": "G3 자동 조건 중 G3-1~G3-3 PASS",
+    "checklist": [
+      "텍스트 대비 4.5:1 이상 (default-rules R1-1)",
+      "기능 경계선 대비 3:1 이상 (default-rules R1-2)",
+      "시안의 전반적인 질"
+    ],
+    "on_reject": "S3"
+  },
+  "story_rules": {
+    "1": "원하는 자료까지 3번 클릭 안에 도달한다",
+    "2": "AI가 사용자 확인 없이 자료를 자동 분류·이동·삭제하지 않는다"
+  }
+}
