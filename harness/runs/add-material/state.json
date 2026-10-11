@@ -1,18 +1,18 @@
 {
   "screen": "add-material",
-  "last_passed": "S3",
+  "last_passed": "S4",
   "retry_count": {
     "S1": 0,
     "S2": 0,
     "S3": 0,
     "S4": 0
   },
-  "approved": false,
+  "approved": true,
   "figma_file": "https://www.figma.com/design/LOINhACuAvoYphUgm4Qhzn",
   "last_judge": {
     "gate": "G3",
-    "result": "AWAITING_APPROVAL",
-    "passed": "3/3 (G3-1~3)"
+    "result": "PASS",
+    "passed": "6/6"
   },
   "decisions": [
     {

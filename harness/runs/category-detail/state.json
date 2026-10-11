@@ -1,0 +1,17 @@
+{
+  "screen": "category-detail",
+  "last_passed": "S4",
+  "retry_count": {
+    "S1": 0,
+    "S2": 0,
+    "S3": 0,
+    "S4": 0
+  },
+  "approved": true,
+  "figma_file": "https://www.figma.com/design/LOINhACuAvoYphUgm4Qhzn",
+  "last_judge": {
+    "gate": "G3",
+    "result": "PASS",
+    "passed": "6/6"
+  }
+}
